@@ -9,33 +9,33 @@
 
 typedef enum
 {
-    TOKEN_IF,
-    TOKEN_WHILE,
-    TOKEN_FOR,
-    EAX,
-    EBX,
-    ECX,
-    EDX,
-    MOV,
-    ADD,
-    AND,
-    XOR,
-    OR,
-    SUB,
-    MUL,
-    DIV,
-    SHR,
-    SHL,
-    CMP,
-    JMP,
-    JE,
-    JNE,
-    JG,
-    JGE,
-    JL,
-    JLE,
-    END,
-    TOKEN_DEFAULT
+	TOKEN_IF,
+	TOKEN_WHILE,
+	TOKEN_FOR,
+	TOKEN_EAX,
+	TOKEN_EBX,
+	TOKEN_ECX,
+	TOKEN_EDX,
+	TOKEN_MOV,
+	TOKEN_ADD,
+	TOKEN_AND,
+	TOKEN_XOR,
+	TOKEN_OR,
+	TOKEN_SUB,
+	TOKEN_MUL,
+	TOKEN_DIV,
+	TOKEN_SHR,
+	TOKEN_SHL,
+	TOKEN_CMP,
+	TOKEN_JMP,
+	TOKEN_JE,
+	TOKEN_JNE,
+	TOKEN_JG,
+	TOKEN_JGE,
+	TOKEN_JL,
+	TOKEN_JLE,
+	TOKEN_END,
+	TOKEN_DEFAULT
 } TOKEN_TYPE; // Enum pentru tipurile de tokenuri
 
 TOKEN_TYPE token_type(char *token);
@@ -44,4 +44,4 @@ void print_func(char *func, char *arg1, char *arg2);
 void symbol_func(char **tokens);
 void c_to_asm(char *line, int *token_flag, char *for_register);
 
-#endif // HELPER_H
+#endif
