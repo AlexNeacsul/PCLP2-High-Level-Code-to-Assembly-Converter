@@ -143,6 +143,7 @@ char *token_type_2_string(char *token)
         return "DEFAULT";
         break;
     default:
+        return "UNKNOWN";
         break;
     }
 } // Funcția care returnează string-ul corespunzător token-ului
@@ -153,9 +154,9 @@ void print_func(char *func, char *arg1, char *arg2)
     if (token_type(arg2) == TOKEN_DEFAULT) // Dacă arg2 nu este un registru afisez câte un char până ajung la ';'
     {
         printf("%s %s, ", token_type_2_string(func), token_type_2_string(arg1));
-        for (int i = 0; i < strlen(arg2); i++)
+        for (size_t i = 0; i < strlen(arg2); i++)
         {
-            if (arg2[i] == ';')
+            if (arg2[i] == ';' || arg2[i] == ')')
             {
                 break;
             }
@@ -197,7 +198,7 @@ void symbol_func(char **tokens)
                 if (token_type(tokens[4]) == TOKEN_DEFAULT)
                 {
                     printf("MUL ");
-                    for (int i = 0; i < strlen(tokens[4]); i++)
+                    for (size_t i = 0; i < strlen(tokens[4]); i++)
                     {
                         if (tokens[4][i] == ';')
                         {
@@ -217,11 +218,11 @@ void symbol_func(char **tokens)
             }
             else
             {
-                printf("MOV EAX, %s\n", token_type_2_string(tokens[0]));
+                printf("MOV eax, %s\n", token_type_2_string(tokens[0]));
                 if (token_type(tokens[4]) == TOKEN_DEFAULT)
                 {
                     printf("MUL ");
-                    for (int i = 0; i < strlen(tokens[4]); i++)
+                    for (size_t i = 0; i < strlen(tokens[4]); i++)
                     {
                         if (tokens[4][i] == ';')
                         {
@@ -238,7 +239,7 @@ void symbol_func(char **tokens)
                 {
                     printf("MUL %s\n", token_type_2_string(tokens[4]));
                 }
-                printf("MOV %s, EAX\n", token_type_2_string(tokens[0]));
+                printf("MOV %s, eax\n", token_type_2_string(tokens[0]));
             }
         }
         else
@@ -255,7 +256,7 @@ void symbol_func(char **tokens)
                 if (token_type(tokens[4]) == TOKEN_DEFAULT)
                 {
                     printf("DIV ");
-                    for (int i = 0; i < strlen(tokens[4]); i++)
+                    for (size_t i = 0; i < strlen(tokens[4]); i++)
                     {
                         if (tokens[4][i] == ';')
                         {
@@ -275,11 +276,11 @@ void symbol_func(char **tokens)
             }
             else
             {
-                printf("MOV EAX, %s\n", token_type_2_string(tokens[0]));
+                printf("MOV eax, %s\n", token_type_2_string(tokens[0]));
                 if (token_type(tokens[4]) == TOKEN_DEFAULT)
                 {
                     printf("DIV ");
-                    for (int i = 0; i < strlen(tokens[4]); i++)
+                    for (size_t i = 0; i < strlen(tokens[4]); i++)
                     {
                         if (tokens[4][i] == ';')
                         {
@@ -296,7 +297,7 @@ void symbol_func(char **tokens)
                 {
                     printf("DIV %s\n", token_type_2_string(tokens[4]));
                 }
-                printf("MOV %s, EAX\n", token_type_2_string(tokens[0]));
+                printf("MOV %s, eax\n", token_type_2_string(tokens[0]));
             }
         }
     }
@@ -336,13 +337,13 @@ void c_to_asm(char *line, int *token_flag, char *for_register)
     case TOKEN_IF:
         *token_flag = 1;
         print_func("CMP", tokens[1], tokens[3]);
-        printf("%s end_if\n", token_type_2_string(tokens[2]));
+        printf("%s end_label\n", token_type_2_string(tokens[2]));
         break;
     case TOKEN_WHILE:
         *token_flag = 2;
         printf("start_loop:\n");
         print_func("CMP", tokens[1], tokens[3]);
-        printf("%s end_loop\n", token_type_2_string(tokens[2]));
+        printf("%s end_label\n", token_type_2_string(tokens[2]));
         break;
     case TOKEN_FOR:
         *token_flag = 3;
@@ -350,7 +351,7 @@ void c_to_asm(char *line, int *token_flag, char *for_register)
         print_func("MOV", tokens[1], tokens[3]);
         printf("start_loop:\n");
         print_func("CMP", tokens[4], tokens[6]);
-        printf("%s end_loop\n", token_type_2_string(tokens[5]));
+        printf("%s end_label\n", token_type_2_string(tokens[5]));
         break;
     case END:
         // Dacă token-ul este END atunci se va verifica ce tip de instrucțiune avem
@@ -369,7 +370,7 @@ void c_to_asm(char *line, int *token_flag, char *for_register)
         }
         else if (*token_flag == 3)
         {
-            print_func("ADD", for_register, "1");
+            print_func("+", for_register, "1");
             printf("JMP start_loop\n");
             printf("end_loop:\n");
             *token_flag = 0;
