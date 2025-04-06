@@ -74,16 +74,16 @@ char *token_type_2_string(char *token)
         return "for";
         break;
     case EAX:
-        return "EAX";
+        return "eax";
         break;
     case EBX:
-        return "EBX";
+        return "ebx";
         break;
     case ECX:
-        return "ECX";
+        return "ecx";
         break;
     case EDX:
-        return "EDX";
+        return "edx";
         break;
     case MOV:
         return "MOV";
