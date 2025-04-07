@@ -305,7 +305,8 @@ void c_to_asm(char *line, int *token_flag, char *for_register)
 		symbol_func(tokens);
 		break;
 	}
+	for (int i = 0; i < token_count; i++)
+		free(tokens[i]);
 	free(tokens);    // Eliberează memoria pentru lista de token-uri
 	tokens = NULL;   // Resetează pointerul
-	token_count = 0; // Resetează numărul de token-uri
 }
